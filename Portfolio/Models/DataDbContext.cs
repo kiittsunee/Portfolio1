@@ -12,12 +12,13 @@ namespace Portfolio.Models
         public DbSet<Post> Posts { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Review> Reviews { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            modelBuilder.Entity<Post>().ToTable("Posts");
-            modelBuilder.Entity<Project>().ToTable("Projects");
-            modelBuilder.Entity<Review>().ToTable("Reviews");
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
+            optionsBuilder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
         }
     }
 }

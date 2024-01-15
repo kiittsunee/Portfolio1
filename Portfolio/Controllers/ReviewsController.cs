@@ -89,6 +89,11 @@ namespace Portfolio.Controllers
           {
               return Problem("Entity set 'DataDbContext.Reviews'  is null.");
           }
+            if (review.Rating < 0 || review.Rating > 5)
+            {
+                ModelState.AddModelError("Rating", "The rating must be between 0 and 5.");
+                return BadRequest(ModelState);
+            }
             _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
 
